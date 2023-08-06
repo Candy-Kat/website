@@ -1,0 +1,37 @@
+---
+import { getCollection } from 'astro:content'
+import BaseLayout from '@/layouts/BaseLayout'
+import ListPosts from '@/components/ListPosts'
+import ListCategories from '@/components/ListCategories'
+import Shape from '@/components/icons/Shape'
+import { sluglify, unsluglify } from '@/utils'
+
+const { category } = Astro.params
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog')
+
+  return posts.map((post) => ({
+    params: { category: sluglify(post.data.category.toLowerCase()) },
+    props: post,
+  }))
+}
+
+const unsluglifyNameCategory = unsluglify(category!.toLowerCase())
+
+const posts = (await getCollection('blog'))
+  .filter((post) => post.data.category.toLowerCase() === unsluglifyNameCategory)
+  .sort((a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf())
+---
+
+<BaseLayout title={category}>
+  <div class='flex justify-start items-center gap-2'>
+    <Shape />
+    <h1 class='text-5xl font-semibold tracking-wide first-letter:uppercase'>
+      {unsluglifyNameCategory}
+    </h1>
+  </div>
+
+  <ListCategories activeCategory={category} />
+  <ListPosts posts={posts} />
+</BaseLayout>
