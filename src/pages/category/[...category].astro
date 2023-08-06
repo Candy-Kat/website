@@ -21,7 +21,7 @@ const unsluglifyNameCategory = unsluglify(category!.toLowerCase())
 
 const posts = (await getCollection('blog'))
   .filter((post) => post.data.category.toLowerCase() === unsluglifyNameCategory)
-  .sort((a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf())
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
 ---
 
 <BaseLayout title={category}>

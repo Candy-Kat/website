@@ -5,10 +5,10 @@ import Shape from '@/components/icons/Shape'
 import BaseLayout from '@/layouts/BaseLayout'
 import { getCollection } from 'astro:content'
 
-const MAX_POSTS = 5 // max number of posts to show on the home page
+const MAX_POSTS = 10 // max number of posts to show on the home page
 const posts = (await getCollection('blog'))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, MAX_POSTS)
-  .sort((a, b) => a.data.pubDate.valueOf() - b.data.pubDate.valueOf())
 ---
 
 <BaseLayout title='Home'>
